@@ -21,3 +21,9 @@
 *.tar.gz
 *.rar
 
+# Remove target folder
+target
+
+# Remove vscode folder
+.vscode
+
