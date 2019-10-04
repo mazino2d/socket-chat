@@ -30,7 +30,7 @@
             <manifest>
               <addClasspath>true</addClasspath>
               <classpathPrefix>lib/</classpathPrefix>
-              <mainClass>server.ServerGUI</mainClass>
+              <mainClass>client.ClientGUI</mainClass>
             </manifest>
           </archive>
           <source>1.8</source>
