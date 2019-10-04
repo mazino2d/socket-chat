@@ -16,45 +16,29 @@ public class LoginGUI {
     private static String ASWR_IP_MESSAGE = "IP Server : ";
     private static String ASWR_PORT_MESSAGE = "Port Server : ";
     private static String ASWR_NAME_MESSAGE = "User Name: ";
-
     private static String LOGIN_BTN_MESSAGE = "Login";
     
     private JFrame frame;
-
-    private JTextField textIP;
-    private JTextField textPort;
-    private JTextField textName;
-
-    private JButton btnLogin;
-    private JButton btnClear;
-
     private JLabel lbError;
-
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LoginGUI window = new LoginGUI();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-    }
+    private JTextField textIP, textPort, textName;
+    private JButton btnLogin, btnClear;
 
     public LoginGUI() {
-		initialize();
+        initializeFrame();
+        initializeLabel();
+        initializeTextBox();
+        initializeButton();
     }
     
-    private void initialize() {
-
+    private void initializeFrame() {
         frame = new JFrame();
 		frame.setResizable(false);
 		frame.setBounds(100, 100, 448, 204);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
-        
+    }
+
+    private void initializeLabel() {
         JLabel lbWelcome = new JLabel(WELCOME_MESSAGE);
 		lbWelcome.setBounds(10, 11, 258, 14);
         frame.getContentPane().add(lbWelcome);
@@ -74,7 +58,9 @@ public class LoginGUI {
         lbError = new JLabel("Erorr message");
 		lbError.setBounds(120, 141, 380, 14);
 		frame.getContentPane().add(lbError);
-        
+    }
+
+    private void initializeTextBox() {
         textPort = new JTextField();
 		textPort.setText("8080");
 		textPort.setBounds(356, 50, 65, 20);
@@ -87,8 +73,13 @@ public class LoginGUI {
         textName = new JTextField();
 		textName.setBounds(101, 77, 152, 30);
         frame.getContentPane().add(textName);
+    }
+
+    private void initializeButton() {
         
         btnLogin = new JButton(LOGIN_BTN_MESSAGE);
+        btnLogin.setBounds(263, 78, 169, 29);
+        frame.getContentPane().add(btnLogin);
 
         // btnLogin.addActionListener(new ActionListener() {
 
@@ -96,10 +87,9 @@ public class LoginGUI {
         
         // });
 
-        btnLogin.setBounds(263, 78, 169, 29);
-        frame.getContentPane().add(btnLogin);
-
         btnClear = new JButton("Clear");
+        btnClear.setBounds(6, 120, 100, 29);
+        frame.getContentPane().add(btnClear);
         
 		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -107,9 +97,18 @@ public class LoginGUI {
 				textName.setText("");
 			}
         });
-
-        btnClear.setBounds(6, 120, 100, 29);
-		frame.getContentPane().add(btnClear);
     }
 
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					LoginGUI window = new LoginGUI();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+    }
 }
