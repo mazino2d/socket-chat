@@ -15,14 +15,37 @@ public class ClientGUI {
     private JFrame frame;
     private JButton btnChat, btnExit;
     private JTextField textYourName, textFriendName;
-    private TextArea textList;
+	private TextArea textList;
+	
+	private static String clientIP = "";
+	private static String userName = "";
+	private static String userData = "";
+	private static int clientPort = 0;
 
     public ClientGUI() {
         initializeFrame();
         initializeLabel();
         initializeTextBox();
         initializeButton();
-    }
+	}
+	
+	public ClientGUI(String ip, int port, String name, String message) throws Exception {
+		clientIP = ip;
+		clientPort = port;
+		userName = name;
+		userData = message;
+		
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					ClientGUI window = new ClientGUI();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
     private void initializeFrame() {
         frame = new JFrame();
