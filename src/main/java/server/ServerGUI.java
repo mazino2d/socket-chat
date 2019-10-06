@@ -20,6 +20,8 @@ public class ServerGUI {
     private JTextField textIP, textPort;
     private static TextArea textMessage;
 
+    private Server server;
+
     public ServerGUI() {
         initializeFrame();
         initializeLabel();
@@ -76,22 +78,38 @@ public class ServerGUI {
         btnStart.setBounds(36, 90, 269, 29);
 		frame.getContentPane().add(btnStart);
 
-		// btnStart.addActionListener(new ActionListener() {
-		// 	public void actionPerformed(ActionEvent arg0) {
-		// 		;
-		// 	}
-        // });
+		btnStart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					server = new Server(8080);
+					ServerGUI.updateMessage("START SERVER");
+				} catch (Exception e) {
+					ServerGUI.updateMessage("START ERROR");
+					e.printStackTrace();
+				}
+			}
+        });
 
         JButton btnStop = new JButton("STOP");
         btnStop.setBounds(315, 90, 260, 29);
         frame.getContentPane().add(btnStop);
         
-		// btnStop.addActionListener(new ActionListener() {
-		// 	public void actionPerformed(ActionEvent arg0) {
-        //         ;
-		// 	}
-		// });
+		btnStop.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+                try {
+					server.stopserver();
+					ServerGUI.updateMessage("STOP SERVER");
+				} catch (Exception e) {
+					e.printStackTrace();
+					ServerGUI.updateMessage("STOP SERVER");
+				}
+			}
+		});
     }
+
+    public static void updateMessage(String msg) {
+		textMessage.append(msg + "\n");
+	}
 
     public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {

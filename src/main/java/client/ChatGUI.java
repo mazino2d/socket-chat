@@ -143,11 +143,11 @@ public class ChatGUI {
         btnUpLoad.setContentAreaFilled(false);
 		btnUpLoad.setBorder(BorderFactory.createEmptyBorder());
 
-		// btnUpLoad.addActionListener(new ActionListener() {
-		// 	public void actionPerformed(ActionEvent arg0) {
-		// 		;
-		// 	}
-        // });
+		btnUpLoad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				;
+			}
+        });
 
         btnDel = new JButton("Clear");
 		btnDel.setBounds(600, 21, 50, 25);
@@ -155,11 +155,11 @@ public class ChatGUI {
         btnDel.setContentAreaFilled(false);
         btnDel.setBorder(BorderFactory.createEmptyBorder());
         
-		// btnDel.addActionListener(new ActionListener() {
-		// 	public void actionPerformed(ActionEvent arg0) {
-		// 		;
-		// 	}
-		// });
+		btnDel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				;
+			}
+		});
 		
     }
 
