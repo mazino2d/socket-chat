@@ -2,25 +2,38 @@ package protocol;
 
 public class Peer {
 
-	private String peerName = "";
-	private String peerHost = "";
-	private int peerPort = 0;
+	private String namePeer = "";
+	private String hostPeer = "";
+	private int portPeer = 0;
 
-	public Peer(String name, String host, int port) {
-        peerName = name; 
-        peerHost = host; 
-        peerPort = port;
+	public void setPeer(String name, String host, int port) {
+		namePeer = name;
+		hostPeer = host;
+		portPeer = port;
 	}
 
-	public void setName(String name) {peerName = name;}
+	public void setName(String name) {
+		namePeer = name;
+	}
 
-	public void setHost(String host) {peerHost = host;}
+	public void setHost(String host) {
+		hostPeer = host;
+	}
 
-	public void setPort(int port) {peerPort = port;}
+	public void setPort(int port) {
+		portPeer = port;
+	}
 
-	public String getName() {return peerName;}
+	public String getName() {
+		return namePeer;
+	}
 
-	public String getHost() {return peerHost;}
+	public String getHost() {
+		return hostPeer;
+	}
 
-	public int getPort() {return peerPort;}
+	public int getPort() {
+		return portPeer;
+	}
 }
+
