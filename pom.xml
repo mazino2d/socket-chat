@@ -22,6 +22,11 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>io.github.vincenzopalazzo</groupId>
+      <artifactId>material-ui-swing</artifactId>
+      <version>1.0.0</version>
+    </dependency>
   </dependencies>
 
   <build>

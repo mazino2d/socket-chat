@@ -8,14 +8,18 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.JTextArea;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import mdlaf.MaterialLookAndFeel;
+
 import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.Label;
-import java.awt.TextArea;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,14 +40,25 @@ import protocol.Tags;
 
 public class ChatGUI {
 
+	static {
+        try {
+            UIManager.setLookAndFeel(new MaterialLookAndFeel());
+            UIManager.put("Button.mouseHoverEnable", true);
+            JFrame.setDefaultLookAndFeelDecorated(false);
+            
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+	}
+
 	private static String URL_DIR = System.getProperty("user.dir");
 	private static String TEMP = "/temp/";
 
 	private JFrame fmChat;
 	private JPanel panelMessage, panelFile;
-	private Label textState, lblReceive;
+	private JLabel textState, lblReceive;
 	private JTextField textPath, textSend;
-	private TextArea textDisPlayChat;
+	private JTextArea textDisPlayChat;
 	private JButton btnChoose, btnUpLoad, btnDel;
 	private JProgressBar progressSendFile;
 
@@ -97,8 +112,9 @@ public class ChatGUI {
 
 	private void initializeFrame() {
 		fmChat = new JFrame();
+		fmChat.setTitle("Chat Room");
 		fmChat.setResizable(false);
-		fmChat.setBounds(200, 200, 688, 559);
+		fmChat.setBounds(450, 100, 688, 540);
 		fmChat.getContentPane().setLayout(null);
 		fmChat.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 	}
@@ -106,7 +122,7 @@ public class ChatGUI {
 	private void initializePanel() {
 		panelFile = new JPanel();
 		panelFile.setBounds(6, 363, 670, 60);
-		//panelFile.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "File"));
+		panelFile.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "File"));
 		fmChat.getContentPane().add(panelFile);
 		panelFile.setLayout(null);
 
@@ -119,19 +135,19 @@ public class ChatGUI {
 
 	private void initializeLabel() {
 		JLabel lblClientIP = new JLabel("Chatting with: ");
-		lblClientIP.setBounds(6, 12, 155, 16);
+		lblClientIP.setBounds(6, 12, 155, 20);
 		fmChat.getContentPane().add(lblClientIP);
 
-		Label label = new Label("Link send file: ");
-		label.setBounds(10, 21, 80, 22);
+		JLabel label = new JLabel("Address: ");
+		label.setBounds(10, 21, 100, 22);
 		panelFile.add(label);
 
-		textState = new Label("");
+		textState = new JLabel("");
 		textState.setBounds(6, 502, 81, 22);
 		textState.setVisible(false);
 		fmChat.getContentPane().add(textState);
 
-		lblReceive = new Label("Receiving ...");
+		lblReceive = new JLabel("Receiving ...");
 		lblReceive.setBounds(491, 510, 83, 14);
 		lblReceive.setVisible(false);
 		fmChat.getContentPane().add(lblReceive);
@@ -140,18 +156,18 @@ public class ChatGUI {
 	private void initializeTextBox() {
 		JTextField textName = new JTextField(username);
 		textName.setEditable(false);
-		textName.setBounds(100, 6, 350, 28);
+		textName.setBounds(120, 7, 390, 28);
 		fmChat.getContentPane().add(textName);
 		textName.setText(guest_name);
 		textName.setColumns(10);
 
-		textDisPlayChat = new TextArea();
+		textDisPlayChat = new JTextArea();
 		textDisPlayChat.setEditable(false);
-		textDisPlayChat.setBounds(6, 40, 668, 317);
+		textDisPlayChat.setBounds(15, 50, 650, 300);
 		fmChat.getContentPane().add(textDisPlayChat);
 
 		textPath = new JTextField("");
-		textPath.setBounds(100, 21, 388, 25);
+		textPath.setBounds(70, 21, 340, 25);
 		panelFile.add(textPath);
 		textPath.setEditable(false);
 		textPath.setColumns(10);
@@ -209,7 +225,7 @@ public class ChatGUI {
 		}
 		
 		JButton btnChoose = new JButton("Browse");
-		btnChoose.setBounds(500, 21, 50, 25);
+		btnChoose.setBounds(410, 21, 85, 25);
 		panelFile.add(btnChoose);
 		btnChoose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -228,11 +244,9 @@ public class ChatGUI {
 				}
 			}
 		});
-		btnChoose.setBorder(BorderFactory.createEmptyBorder());
-		btnChoose.setContentAreaFilled(false);
 		
 		JButton btnUpLoad = new JButton("Send");
-		btnUpLoad.setBounds(550, 21, 50, 25);
+		btnUpLoad.setBounds(495, 21, 85, 25);
 		panelFile.add(btnUpLoad);
 		btnUpLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -244,11 +258,9 @@ public class ChatGUI {
 					}
 			}
 		});
-		btnUpLoad.setContentAreaFilled(false);
-		btnUpLoad.setBorder(BorderFactory.createEmptyBorder());
 
 		JButton btnDel = new JButton("Clear");
-		btnDel.setBounds(600, 21, 50, 25);
+		btnDel.setBounds(580, 21, 85, 25);
 		panelFile.add(btnDel);
 		btnDel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -257,8 +269,6 @@ public class ChatGUI {
 				textPath.setText("");
 			}
 		});
-		btnDel.setContentAreaFilled(false);
-		btnDel.setBorder(BorderFactory.createEmptyBorder());
 
 		JButton btnSend = new JButton("SEND");
 		btnSend.setBounds(530, 29, 80, 23);
@@ -305,7 +315,7 @@ public class ChatGUI {
 				}
 			}
 		});
-		btnDisconnect.setBounds(560, 6, 113, 29);
+		btnDisconnect.setBounds(535, 5, 130, 29);
 		fmChat.getContentPane().add(btnDisconnect);
 	}
 

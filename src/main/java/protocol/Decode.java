@@ -37,6 +37,27 @@ public class Decode {
 			return null;
 	}
 
+	public static String getDiedAccount(String message) {
+		if (request.matcher(message).matches()) {
+			Document document = convertStringToXML(message);
+
+			String status = document
+				.getElementsByTagName("STATUS")
+				.item(0).getTextContent();
+			
+			if(status.equals(Tags.SERVER_ONLINE)) return null;
+
+			if(status.equals(Tags.SERVER_OFFLINE)) {
+				String name = document
+				.getElementsByTagName("PEER_NAME")
+				.item(0).getTextContent();
+
+				return name;
+			}
+		}
+		return null;
+	}
+
 	public static ArrayList<Peer> getAllAccount(String message) {
 		if (find_accounts.matcher(message).matches()) {
 			ArrayList<Peer> account_list = new ArrayList<Peer>();
@@ -70,27 +91,6 @@ public class Decode {
 			return account_list;
 		} else
 			return null;
-	}
-
-	public static String getDiedAccount(String message) {
-		if (request.matcher(message).matches()) {
-			Document document = convertStringToXML(message);
-
-			String status = document
-				.getElementsByTagName("STATUS")
-				.item(0).getTextContent();
-			
-			if(status.equals(Tags.SERVER_ONLINE)) return null;
-
-			if(status.equals(Tags.SERVER_OFFLINE)) {
-				String name = document
-				.getElementsByTagName("PEER_NAME")
-				.item(0).getTextContent();
-
-				return name;
-			}
-		}
-		return null;
 	}
 
 	public static String getTextMessage(String message) {

@@ -1,6 +1,9 @@
 package server;
 
+import mdlaf.MaterialLookAndFeel;
+
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.Inet4Address;
@@ -9,15 +12,28 @@ import java.net.UnknownHostException;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JButton;
-import java.awt.TextArea;
+import javax.swing.JTextArea;
 
 public class ServerGUI {
 
+	static {
+        try {
+            UIManager.setLookAndFeel(new MaterialLookAndFeel());
+            UIManager.put("Button.mouseHoverEnable", true);
+            JFrame.setDefaultLookAndFeelDecorated(false);
+            
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+	}
+	
 	public static int port = 8080;
 	private JFrame fmServer;
 	private JTextField txtIP, txtPort;
-	private static TextArea txtMessage;
+	private static JTextArea txtMessage;
 	private static JLabel lbNumber;
 	Server server;
 
@@ -30,30 +46,31 @@ public class ServerGUI {
 
 	private void initializeFrame() {
 		fmServer = new JFrame();
+		fmServer.setTitle("Server Controller");
 		fmServer.setResizable(false);
-		fmServer.setBounds(200, 200, 622, 442);
+		fmServer.setBounds(200, 200, 550, 442);
 		fmServer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fmServer.getContentPane().setLayout(null);
 	}
 
 	private void initializeLabel() {
-		JLabel lblIP = new JLabel("IP ADDRESS :");
-		lblIP.setBounds(36, 55, 76, 16);
-		fmServer.getContentPane().add(lblIP);
+		JLabel lbIP = new JLabel("IP :");
+		lbIP.setBounds(5, 55, 40, 16);
+		fmServer.getContentPane().add(lbIP);
 
-		JLabel lblNewLabel = new JLabel("PORT : ");
-		lblNewLabel.setBounds(315, 55, 61, 16);
-		fmServer.getContentPane().add(lblNewLabel);
+		JLabel lbPort = new JLabel("PORT : ");
+		lbPort.setBounds(285, 55, 50, 16);
+		fmServer.getContentPane().add(lbPort);
 
-		JLabel lblNhom = new JLabel("Kraken Team");
-		lblNhom.setBounds(290, 6, 109, 16);
-		fmServer.getContentPane().add(lblNhom);
+		JLabel lbGroup = new JLabel("Kraken Team");
+		lbGroup.setBounds(5, 6, 109, 16);
+		fmServer.getContentPane().add(lbGroup);
 	}
 
 	private void initializeTextBox() {
 		txtIP = new JTextField();
 		txtIP.setEditable(false);
-		txtIP.setBounds(120, 49, 176, 28);
+		txtIP.setBounds(55, 49, 210, 28);
 		fmServer.getContentPane().add(txtIP);
 		txtIP.setColumns(10);
 		try {
@@ -65,13 +82,14 @@ public class ServerGUI {
 		txtPort = new JTextField();
 		txtPort.setEditable(false);
 		txtPort.setColumns(10);
-		txtPort.setBounds(366, 49, 208, 28);
+		txtPort.setBounds(336, 49, 208, 28);
 		fmServer.getContentPane().add(txtPort);
 		txtPort.setText("8080");
 
-		txtMessage = new TextArea();
+		txtMessage = new JTextArea();
 		txtMessage.setEditable(false);
-		txtMessage.setBounds(6, 130, 602, 270);
+		txtMessage.setFont(new Font("Hacker",Font.BOLD,10));
+		txtMessage.setBounds(5, 130, 540, 270);
 		fmServer.getContentPane().add(txtMessage);
 	}
 
@@ -89,7 +107,7 @@ public class ServerGUI {
 				}
 			}
 		});
-		btnStart.setBounds(36, 90, 260, 29);
+		btnStart.setBounds(5, 90, 260, 29);
 		fmServer.getContentPane().add(btnStart);
 
 		JButton btnStop = new JButton("STOP");
@@ -105,11 +123,12 @@ public class ServerGUI {
 				}
 			}
 		});
-		btnStop.setBounds(315, 90, 260, 29);
+		btnStop.setBounds(285, 90, 260, 29);
 		fmServer.getContentPane().add(btnStop);
 	}
 
 	public static void main(String[] args) {
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {

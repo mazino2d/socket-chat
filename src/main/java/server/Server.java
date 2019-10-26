@@ -15,7 +15,7 @@ public class Server {
 
 	private ArrayList<Peer> peer_list = null;	
 	private ServerSocket server;						
-	private Socket connection;			
+	private Socket connection;
 	private ObjectOutputStream sender;		
 	private ObjectInputStream listener;			
 	public boolean isStop = false, isExit = false;		
@@ -42,8 +42,6 @@ public class Server {
 		listener = new ObjectInputStream(connection.getInputStream());	
 		// Get data from the client
 		String message = (String) listener.readObject();
-		// Update message to application console
-		ServerGUI.updateMessage(message);
 
 		/* Analyze message*/
 		// CASE 1 : Client request a new account
@@ -53,11 +51,14 @@ public class Server {
 			String acc_ip = connection.getInetAddress().getHostAddress();
 			Integer acc_port = Integer.parseInt(acc_info.get(1));
 			String acc_name = acc_info.get(0);
-			// Add new peer to peer list
-			if (getIndexByName(acc_name) == -1) {						
+			
+			if (getIndexByName(acc_name) == -1)	 {
+				// Add new peer to peer list			
 				saveNewPeer(acc_name, acc_ip,acc_port);			
-				ServerGUI.updateMessage("New account: " + acc_name);						
-			} else 
+				// Update message to application console
+				ServerGUI.updateMessage(message);
+			}	
+			else 
 				return false;
 		} 
 		// CASE 2 : Client send a keep alive message

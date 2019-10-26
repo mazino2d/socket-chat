@@ -7,8 +7,11 @@ import java.util.regex.Pattern;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JButton;
 import client.MenuGUI;
+import mdlaf.MaterialLookAndFeel;
 import protocol.Encode;
 import protocol.Tags;
 
@@ -20,6 +23,17 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 public class LoginGUI {
+
+	static {
+        try {
+            UIManager.setLookAndFeel(new MaterialLookAndFeel());
+            UIManager.put("Button.mouseHoverEnable", true);
+            JFrame.setDefaultLookAndFeelDecorated(false);
+            
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+	}
 
 	private static String NAME_FAILED = "CONNECT WITH OTHER NAME";
 	private static String NAME_EXSIST = "NAME IS EXSISED";
@@ -38,8 +52,9 @@ public class LoginGUI {
 
 	private void initializeFrame() {
 		fmLogin = new JFrame();
+		fmLogin.setTitle("Login");
 		fmLogin.setResizable(false);
-		fmLogin.setBounds(100, 100, 448, 204);
+		fmLogin.setBounds(500, 200, 448, 150);
 		fmLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fmLogin.getContentPane().setLayout(null);
 	}
@@ -49,16 +64,16 @@ public class LoginGUI {
 		lbWelcome.setBounds(10, 11, 258, 14);
 		fmLogin.getContentPane().add(lbWelcome);
 
-		JLabel lbIP = new JLabel("IP Server : ");
-		lbIP.setBounds(10, 50, 86, 20);
+		JLabel lbIP = new JLabel("IP : ");
+		lbIP.setBounds(10, 50, 60, 20);
 		fmLogin.getContentPane().add(lbIP);
 
-		JLabel lbPort = new JLabel("Port Server : ");
-		lbPort.setBounds(263, 53, 79, 14);
+		JLabel lbPort = new JLabel("Port : ");
+		lbPort.setBounds(263, 50, 60, 20);
 		fmLogin.getContentPane().add(lbPort);
 
-		JLabel lbUsername = new JLabel("User Name: ");
-		lbUsername.setBounds(10, 82, 86, 17);
+		JLabel lbUsername = new JLabel("Name : ");
+		lbUsername.setBounds(10, 82, 60, 20);
 		fmLogin.getContentPane().add(lbUsername);
 
 		lbError = new JLabel("");
@@ -68,25 +83,26 @@ public class LoginGUI {
 	
 	private void initializeTextBox() {
 		txtIP = new JTextField();
-		txtIP.setBounds(101, 46, 152, 28);
-		fmLogin.getContentPane().add(txtIP);
 		txtIP.setColumns(10);
+		txtIP.setText("localhost");
+		txtIP.setBounds(91, 46, 152, 30);
+		fmLogin.getContentPane().add(txtIP);
 
 		txtPort = new JTextField();
-		txtPort.setText("8080");
-		txtPort.setEditable(false);
 		txtPort.setColumns(10);
-		txtPort.setBounds(356, 50, 65, 20);
+		txtPort.setText("8080");
+		txtPort.setBounds(340, 46, 100, 30);
 		fmLogin.getContentPane().add(txtPort);
 
 		txtUsername = new JTextField();
 		txtUsername.setColumns(10);
-		txtUsername.setBounds(101, 77, 152, 30);
+		txtUsername.setText("noname");
+		txtUsername.setBounds(91, 77, 152, 30);
 		fmLogin.getContentPane().add(txtUsername);
 	}
 	
 	private void initializeButton() {
-		JButton btnlogin = new JButton("login");
+		JButton btnlogin = new JButton("Login");
 		btnlogin.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
@@ -127,7 +143,7 @@ public class LoginGUI {
 				}
 			}
 		});
-		btnlogin.setBounds(263, 78, 169, 29);
+		btnlogin.setBounds(250, 78, 90, 29);
 		fmLogin.getContentPane().add(btnlogin);
 		lbError.setVisible(false);
 		
@@ -135,10 +151,11 @@ public class LoginGUI {
 		btnclear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				txtIP.setText("");
+				txtPort.setText("");
 				txtUsername.setText("");
 			}
 		});
-		btnclear.setBounds(6, 120, 100, 29);
+		btnclear.setBounds(350, 78, 90, 29);
 		fmLogin.getContentPane().add(btnclear);
 		lbError.setVisible(false);
 	}		

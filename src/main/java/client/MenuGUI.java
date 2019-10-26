@@ -4,9 +4,14 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import mdlaf.MaterialLookAndFeel;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import java.awt.TextArea;
+import javax.swing.JTextArea;
 
 import javax.swing.JButton;
 
@@ -16,13 +21,24 @@ import java.awt.event.ActionEvent;
 
 public class MenuGUI {
 
+	static {
+        try {
+            UIManager.setLookAndFeel(new MaterialLookAndFeel());
+            UIManager.put("Button.mouseHoverEnable", true);
+            JFrame.setDefaultLookAndFeelDecorated(false);
+            
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+	}
+
 	private Menu clientNode;
 	private static String client_ip = "", username = "", message = "";
 	private static int client_port = 0;
 	
 	private JFrame fmMenu;
 	private JTextField txtUserame, txtFriendName;
-	private static TextArea txtPeerList;
+	private static JTextArea txtPeerList;
 	private JButton btnChat, btnExit;
 
 	public MenuGUI(String ip, int port, String name, String msg) throws Exception {
@@ -53,14 +69,14 @@ public class MenuGUI {
 	private void initializeFrame() {
 		fmMenu = new JFrame();
 		fmMenu.setResizable(false);
-		fmMenu.setBounds(100, 100, 330, 556);
+		fmMenu.setBounds(100, 100, 330, 540);
 		fmMenu.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		fmMenu.getContentPane().setLayout(null);
 	}
 
 	private void initializeLabel() {
-		JLabel lbUsername = new JLabel("User Name: ");
-		lbUsername.setBounds(10, 17, 82, 16);
+		JLabel lbUsername = new JLabel("Username: ");
+		lbUsername.setBounds(10, 17, 100, 16);
 		fmMenu.getContentPane().add(lbUsername);
 
 		JLabel lbFirendName = new JLabel("Friend Name: ");
@@ -72,10 +88,10 @@ public class MenuGUI {
 		txtUserame = new JTextField(username);
 		txtUserame.setEditable(false);
 		txtUserame.setColumns(10);
-		txtUserame.setBounds(90, 11, 186, 28);
+		txtUserame.setBounds(110, 11, 210, 28);
 		fmMenu.getContentPane().add(txtUserame);
 
-		txtPeerList = new TextArea();
+		txtPeerList = new JTextArea();
 		txtPeerList.setText("");
 		txtPeerList.setEditable(false);
 		txtPeerList.setBounds(10, 53, 310, 372);
@@ -83,7 +99,7 @@ public class MenuGUI {
 
 		txtFriendName = new JTextField("");
 		txtFriendName.setColumns(10);
-		txtFriendName.setBounds(100, 439, 205, 28);
+		txtFriendName.setBounds(125, 439, 192, 28);
 		fmMenu.getContentPane().add(txtFriendName);
 	}
 
@@ -135,7 +151,7 @@ public class MenuGUI {
 				}
 			}
 		});
-		btnExit.setBounds(190, 478, 113, 29);
+		btnExit.setBounds(200, 478, 113, 29);
 		fmMenu.getContentPane().add(btnExit);
 	}
 		

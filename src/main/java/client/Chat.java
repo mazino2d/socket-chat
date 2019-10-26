@@ -21,10 +21,6 @@ public class Chat {
 		isStop = true;
 	}
 
-	public boolean getStop() {
-		return isStop;
-	}
-
 	public Chat(String name) throws Exception {
 		userName = name;
 		port = Menu.getPort();
