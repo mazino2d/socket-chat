@@ -1,7 +1,6 @@
 package protocol;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import java.io.StringReader;
@@ -73,29 +72,25 @@ public class Decode {
 			return null;
 	}
 
-	public static ArrayList<Peer> updatePeerOnline(
-			ArrayList<Peer> peerList, String msg) {
-		Pattern alive = Pattern.compile(Tags.STATUS_OPEN_TAG
-				+ Tags.SERVER_ONLINE + Tags.STATUS_CLOSE_TAG);
-		Pattern killUser = Pattern.compile(Tags.PEER_NAME_OPEN_TAG + "[^<>]*"
-				+ Tags.PEER_NAME_CLOSE_TAG);
-		if (request.matcher(msg).matches()) {
-			Matcher findState = alive.matcher(msg);
-			if (findState.find())
-				return peerList;
-			findState = killUser.matcher(msg);
-			if (findState.find()) {
-				String findPeer = findState.group(0);
-				int size = peerList.size();
-				String name = findPeer.substring(11, findPeer.length() - 12);
-				for (int i = 0; i < size; i++)
-					if (name.equals(peerList.get(i).getName())) {
-						peerList.remove(i);
-						break;
-					}
+	public static String getDiedAccount(String message) {
+		if (request.matcher(message).matches()) {
+			Document document = convertStringToXML(message);
+
+			String status = document
+				.getElementsByTagName("STATUS")
+				.item(0).getTextContent();
+			
+			if(status.equals(Tags.SERVER_ONLINE)) return null;
+
+			if(status.equals(Tags.SERVER_OFFLINE)) {
+				String name = document
+				.getElementsByTagName("PEER_NAME")
+				.item(0).getTextContent();
+
+				return name;
 			}
 		}
-		return peerList;
+		return null;
 	}
 
 	public static String getTextMessage(String message) {

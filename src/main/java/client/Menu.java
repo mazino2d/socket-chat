@@ -74,7 +74,7 @@ public class Menu {
 			super.run();
 			while (!isStop) {
 				try {
-					Thread.sleep(15000);
+					Thread.sleep(1500);
 					request();
 				} catch (Exception e) {
 					e.printStackTrace();

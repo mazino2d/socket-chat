@@ -26,57 +26,54 @@ public class Server {
 		peer_list = new ArrayList<Peer>();
 		(new WaitForConnect()).start();			
 	}
-	
-	public void stopserver() throws Exception {
+
+	public void stop() throws Exception {
 		isStop = true;
 		server.close();							
 		connection.close();						
 	}
 	
-	private boolean waitForConnection() throws Exception {
-		connection = server.accept();			
-		listener = new ObjectInputStream(connection.getInputStream());	
+	private boolean listen() throws Exception {
+		/* Get data by TCP */
 
-		String message = (String) listener.readObject();						
-		ArrayList<String> getData = Decode.getAccountInformation(message);					
-		ServerGUI.updateMessage(message);											
-		if (getData != null) {
-			if (!isExsistName(getData.get(0))) {						
-				saveNewPeer(getData.get(0), connection.getInetAddress()			
-						.getHostAddress(), Integer.parseInt(getData.get(1)));			
-				ServerGUI.updateMessage(getData.get(0));						
-			} else
+		// Waiting for connection
+		connection = server.accept();
+		// Listening the client
+		listener = new ObjectInputStream(connection.getInputStream());	
+		// Get data from the client
+		String message = (String) listener.readObject();
+		// Update message to application console
+		ServerGUI.updateMessage(message);
+
+		/* Analyze message*/
+		// CASE 1 : Client request a new account
+		ArrayList<String> acc_info = Decode.getAccountInformation(message);
+		if (acc_info != null) {
+			// Prepare data for new peer
+			String acc_ip = connection.getInetAddress().getHostAddress();
+			Integer acc_port = Integer.parseInt(acc_info.get(1));
+			String acc_name = acc_info.get(0);
+			// Add new peer to peer list
+			if (getIndexByName(acc_name) == -1) {						
+				saveNewPeer(acc_name, acc_ip,acc_port);			
+				ServerGUI.updateMessage("New account: " + acc_name);						
+			} else 
 				return false;
-		} else {
-			int size = peer_list.size();					
-			Decode.updatePeerOnline(peer_list, message);			
-			if (size != peer_list.size()) {					
-				isExit = true;								
+		} 
+		// CASE 2 : Client send a keep alive message
+		if (acc_info == null) {		
+			String acc_name = Decode.getDiedAccount(message);
+			int index = getIndexByName(acc_name);
+			System.out.println(index);
+			if(index != -1) {
+				System.out.println(index);
+				peer_list.remove(index);
+				isExit = true;
 			}
 		}
+
 		return true;
 	}
-	
-	private void saveNewPeer(String user, String ip, int port) throws Exception {
-		Peer new_peer = new Peer();		
-		if (peer_list.size() == 0)				
-			peer_list = new ArrayList<Peer>();
-		new_peer.setPeer(user, ip, port);		
-		peer_list.add(new_peer);					
-	}
-	
-	private boolean isExsistName(String name) throws Exception {
-		if (peer_list == null)
-			return false;
-		int size = peer_list.size();
-		for (int i = 0; i < size; i++) {
-			Peer peer = peer_list.get(i);
-			if (peer.getName().equals(name))
-				return true;
-		}
-		return false;
-	}
-	
 	public class WaitForConnect extends Thread {
 
 		@Override
@@ -84,24 +81,46 @@ public class Server {
 			super.run();
 			try {
 				while (!isStop) {
-					if (waitForConnection()) {
-						if (isExit) {
-							isExit = false;
-						} else {
-							sender = new ObjectOutputStream(connection.getOutputStream());
-							sender.writeObject(Encode.genPeerListMessage(peer_list));
-							sender.flush(); sender.close();
-						}
+					String message = "";
+
+					if (listen()) {
+						if (isExit) {isExit = false; continue;} 
+						message = Encode.genPeerListMessage(peer_list);
 					} else {
-						sender = new ObjectOutputStream(connection.getOutputStream());
-						sender.writeObject(Tags.SESSION_DENY_TAG);
-						sender.flush(); sender.close();
+						message = Tags.SESSION_DENY_TAG;
 					}
+
+					sender = new ObjectOutputStream(connection.getOutputStream());
+					sender.writeObject(message);
+					sender.flush(); sender.close();
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
+	
+	// Tool function of this.peer_list: Save a new peer
+	private void saveNewPeer(String user, String ip, int port) throws Exception {
+		Peer new_peer = new Peer();		
+		if (peer_list.size() == 0)				
+			peer_list = new ArrayList<Peer>();
+		new_peer.setPeer(user, ip, port);		
+		peer_list.add(new_peer);					
+	}
+	// Tool function of this.peer_list: get peer index
+	private Integer getIndexByName(String name) throws Exception {
+		if (peer_list == null) return -1;
+		
+		int size = peer_list.size();
+
+		for (int i = 0; i < size; i++) {
+			Peer peer = peer_list.get(i);
+			if (peer.getName().equals(name)) return i;
+		}
+
+		return -1;
+	}
+
 }
 

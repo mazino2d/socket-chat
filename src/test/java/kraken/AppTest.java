@@ -33,7 +33,7 @@ public class AppTest extends TestCase
     /**
      * Rigourous Test :-)
      */
-    public void test_GetAccountInformation_Right()
+    public void test_GetAccountInformation()
     {
         ArrayList<String> test_code = Decode.getAccountInformation(
             "<SESSION><PEER_NAME>abc</PEER_NAME><PORT>8080</PORT></SESSION>"
@@ -43,24 +43,7 @@ public class AppTest extends TestCase
         );
         assertEquals(expect_code, test_code);
     }
-    public void test_GetAccountInformation_Wrong()
-    {
-        ArrayList<String> test_code_one = Decode.getAccountInformation(
-            "<PEER_NAME>abc</PEER_NAME><PORT>8080</PORT>"
-        );
-        ArrayList<String> test_code_two = Decode.getAccountInformation(
-            "<SESSION><PORT>8080</PORT></SESSION>"
-        );
-        ArrayList<String> test_code_three = Decode.getAccountInformation(
-            "<SESSION><PEER_NAME>abc</PEER_NAME></SESSION>"
-        );
-        ArrayList<String> expect_code = null;
-
-        assertEquals(expect_code, test_code_one);
-        assertEquals(expect_code, test_code_two);
-        assertEquals(expect_code, test_code_three);
-    }
-    public void test_GetAllAccount_Right()
+    public void test_GetAllAccount()
     {
         ArrayList<Peer> test_code = Decode.getAllAccount(
             "<SESSION_ACCEPT>"
@@ -74,17 +57,16 @@ public class AppTest extends TestCase
         ArrayList<Peer> expect_code = new ArrayList<Peer>(Arrays.asList(abc, xyz));
         assertEquals(expect_code.toString(), test_code.toString());
     }
-    public void test_GetAllAccount_Wrong()
+    public void test_GetDiedAccount()
     {
-        ArrayList<Peer> test_code = Decode.getAllAccount(
-            "<PEER><PEER_NAME>abc</PEER_NAME><IP>127.0.0.1</IP><PORT>8080</PORT></PEER>" +
-            "<PEER><PEER_NAME>xyz</PEER_NAME><IP>127.0.0.1</IP><PORT>8081</PORT></PEER>"
+        String test_code = Decode.getDiedAccount(
+            "<SESSION_KEEP_ALIVE><PEER_NAME>abc</PEER_NAME><STATUS>DIED</STATUS></SESSION_KEEP_ALIVE>"
         );
+        String expect_code = "abc";
 
-        ArrayList<Peer> expect_code = null;
         assertEquals(expect_code, test_code);
     }
-    public void test_GetTextMessage_Right()
+    public void test_GetTextMessage()
     {
         String test_code = Decode.getTextMessage(
             "<CHAT_MSG>Di du dua di em oi</CHAT_MSG>"

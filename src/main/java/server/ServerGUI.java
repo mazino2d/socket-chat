@@ -97,7 +97,7 @@ public class ServerGUI {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					server.stopserver();
+					server.stop();
 					ServerGUI.updateMessage("STOP SERVER");
 				} catch (Exception e) {
 					e.printStackTrace();

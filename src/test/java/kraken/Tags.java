@@ -41,6 +41,6 @@ public class Tags {
 	public static String CHAT_CLOSE_TAG = "<CHAT_CLOSE />";
 
 	public static String SERVER_ONLINE = "ALIVE";
-	public static String SERVER_OFFLINE = "OOPS >>>WILL BE KILLED<<< ";
+	public static String SERVER_OFFLINE = "DIED";
 }
 
