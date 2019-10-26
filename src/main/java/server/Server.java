@@ -2,6 +2,7 @@ package server;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -21,8 +22,8 @@ public class Server {
 	public boolean isStop = false, isExit = false;		
 	
 	
-	public Server(int port) throws Exception {
-		server = new ServerSocket(port);		
+	public Server(String ip, int port) throws Exception {
+		server = new ServerSocket(port, 50, InetAddress.getByName(ip));		
 		peer_list = new ArrayList<Peer>();
 		(new WaitForConnect()).start();			
 	}
@@ -58,19 +59,13 @@ public class Server {
 				// Update message to application console
 				ServerGUI.updateMessage(message);
 			}	
-			else 
-				return false;
+			else return false;
 		} 
 		// CASE 2 : Client send a keep alive message
 		if (acc_info == null) {		
 			String acc_name = Decode.getDiedAccount(message);
 			int index = getIndexByName(acc_name);
-			System.out.println(index);
-			if(index != -1) {
-				System.out.println(index);
-				peer_list.remove(index);
-				isExit = true;
-			}
+			if(index != -1) {peer_list.remove(index); isExit = true;}
 		}
 
 		return true;

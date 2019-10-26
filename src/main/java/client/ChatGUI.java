@@ -58,8 +58,8 @@ public class ChatGUI {
 	private JPanel panelMessage, panelFile;
 	private JLabel textState, lblReceive;
 	private JTextField textPath, textSend;
-	private JTextArea textDisPlayChat;
-	private JButton btnChoose, btnUpLoad, btnDel;
+	private JTextArea txtDisplayChat;
+	private JButton btnChoose, btnUpload, btnDelete;
 	private JProgressBar progressSendFile;
 
 	private ChatRoom chat;
@@ -114,7 +114,7 @@ public class ChatGUI {
 		fmChat = new JFrame();
 		fmChat.setTitle("Chat Room");
 		fmChat.setResizable(false);
-		fmChat.setBounds(450, 100, 688, 540);
+		fmChat.setBounds(450, 100, 688, 600);
 		fmChat.getContentPane().setLayout(null);
 		fmChat.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 	}
@@ -161,10 +161,10 @@ public class ChatGUI {
 		textName.setText(guest_name);
 		textName.setColumns(10);
 
-		textDisPlayChat = new JTextArea();
-		textDisPlayChat.setEditable(false);
-		textDisPlayChat.setBounds(15, 50, 650, 300);
-		fmChat.getContentPane().add(textDisPlayChat);
+		txtDisplayChat = new JTextArea();
+		txtDisplayChat.setEditable(false);
+		txtDisplayChat.setBounds(15, 50, 650, 300);
+		fmChat.getContentPane().add(txtDisplayChat);
 
 		textPath = new JTextField("");
 		textPath.setBounds(70, 21, 340, 25);
@@ -236,19 +236,17 @@ public class ChatGUI {
 				int result = fileChooser.showOpenDialog(fmChat);
 				if (result == JFileChooser.APPROVE_OPTION) {
 					isSendFile = true;
-					String path_send = (fileChooser.getSelectedFile()
-							.getAbsolutePath()) ;
-					System.out.println(path_send);
+					String path_send = (fileChooser.getSelectedFile().getAbsolutePath()) ;
 					file_name = fileChooser.getSelectedFile().getName();
 					textPath.setText(path_send);
 				}
 			}
 		});
 		
-		JButton btnUpLoad = new JButton("Send");
-		btnUpLoad.setBounds(495, 21, 85, 25);
-		panelFile.add(btnUpLoad);
-		btnUpLoad.addActionListener(new ActionListener() {
+		JButton btnUpload = new JButton("Send");
+		btnUpload.setBounds(495, 21, 85, 25);
+		panelFile.add(btnUpload);
+		btnUpload.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (isSendFile)
 					try {
@@ -259,10 +257,10 @@ public class ChatGUI {
 			}
 		});
 
-		JButton btnDel = new JButton("Clear");
-		btnDel.setBounds(580, 21, 85, 25);
-		panelFile.add(btnDel);
-		btnDel.addActionListener(new ActionListener() {
+		JButton btnDelete = new JButton("Clear");
+		btnDelete.setBounds(580, 21, 85, 25);
+		panelFile.add(btnDelete);
+		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				isSendFile = false;
 				textSend.setText("");
@@ -341,22 +339,20 @@ public class ChatGUI {
 	}
 	
 	public void updateChat(String msg) {
-		textDisPlayChat.append(msg + "\n");
+		txtDisplayChat.append(msg + "\n");
 	}
 
 	public void copyFileReceive(InputStream inputStr, OutputStream outputStr,
 			String path) throws IOException {
-		byte[] buffer = new byte[1024];
-		int lenght;
-		while ((lenght = inputStr.read(buffer)) > 0) {
-			outputStr.write(buffer, 0, lenght);
-		}
-		inputStr.close();
-		outputStr.close();
-		File fileTemp = new File(path);
-		if (fileTemp.exists()) {
-			fileTemp.delete();
-		}
+			byte[] buffer = new byte[1024];
+			int lenght;
+			while ((lenght = inputStr.read(buffer)) > 0) {
+				outputStr.write(buffer, 0, lenght);
+			}
+			inputStr.close();
+			outputStr.close();
+			File fileTemp = new File(path);
+			if (fileTemp.exists()) fileTemp.delete();
 	}
 
 	public class ChatRoom extends Thread {
@@ -365,14 +361,13 @@ public class ChatGUI {
 		private ObjectOutputStream outPeer;
 		private ObjectInputStream inPeer;
 		private boolean continueSendFile = true, finishReceive = false;
-		private int sizeOfSend = 0, sizeOfData = 0, sizeFile = 0,
-				sizeReceive = 0;
+		private int sizeOfSend = 0, sizeOfData = 0, sizeFile = 0, sizeReceive = 0;
 		private String nameFileReceive = "";
 		private InputStream inFileSend;
 		private FileData dataFile;
 
-		public ChatRoom(Socket connection, String name, String guest)
-				throws Exception {
+		public ChatRoom(Socket connection, String name, String guest) 
+		throws Exception {
 			connect = new Socket();
 			connect = connection;
 			guest_name = guest;
@@ -386,8 +381,10 @@ public class ChatGUI {
 				try {
 					inPeer = new ObjectInputStream(connect.getInputStream());
 					Object obj = inPeer.readObject();
+
 					if (obj instanceof String) {
 						String msgObj = obj.toString();
+
 						if (msgObj.equals(Tags.CHAT_CLOSE_TAG)) {
 							isStop = true;
 
@@ -397,6 +394,7 @@ public class ChatGUI {
 							connect.close();
 							break;
 						}
+
 						if (Decode.checkFile(msgObj)) {
 							isReceiveFile = true;
 							nameFileReceive = msgObj.substring(10,
@@ -406,8 +404,6 @@ public class ChatGUI {
 								fmChat, guest_name + " send file " + nameFileReceive
 								+ " for you", null,  JOptionPane.YES_NO_OPTION
 							);
-
-							System.out.println("result" + result);
 							
 							if (result == 0) {
 								File fileReceive = new File(URL_DIR + TEMP
@@ -423,10 +419,11 @@ public class ChatGUI {
 								sendMessage(Tags.FILE_REQ_NOACK_TAG);
 							}
 						}
+
 						if (Decode.checkFeedBack(msgObj)) {
 							// btnChoose.setEnabled(false);
-							// btnUpLoad.setEnabled(false);
-							// btnDel.setEnabled(false);
+							// btnUpload.setEnabled(false);
+							// btnDelete.setEnabled(false);
 							new Thread(new Runnable() {
 								public void run() {
 									try {
@@ -523,8 +520,8 @@ public class ChatGUI {
 									isSendFile = false;
 									textPath.setText("");
 									btnChoose.setEnabled(true);
-									btnUpLoad.setEnabled(true);
-									btnDel.setEnabled(true);
+									btnUpload.setEnabled(true);
+									btnDelete.setEnabled(true);
 									updateChat("!!!YOU ARE SEND FILE COMPLETE!!!");
 									inFileSend.close();
 								}

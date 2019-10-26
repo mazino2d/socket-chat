@@ -54,14 +54,14 @@ public class LoginGUI {
 		fmLogin = new JFrame();
 		fmLogin.setTitle("Login");
 		fmLogin.setResizable(false);
-		fmLogin.setBounds(500, 200, 448, 150);
+		fmLogin.setBounds(500, 200, 448, 200);
 		fmLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fmLogin.getContentPane().setLayout(null);
 	}
 	
 	private void initializeLabel() {
 		JLabel lbWelcome = new JLabel("Connect With Server\r\n");
-		lbWelcome.setBounds(10, 11, 258, 14);
+		lbWelcome.setBounds(10, 11, 140, 14);
 		fmLogin.getContentPane().add(lbWelcome);
 
 		JLabel lbIP = new JLabel("IP : ");
@@ -76,8 +76,8 @@ public class LoginGUI {
 		lbUsername.setBounds(10, 82, 60, 20);
 		fmLogin.getContentPane().add(lbUsername);
 
-		lbError = new JLabel("");
-		lbError.setBounds(120, 141, 380, 14);
+		lbError = new JLabel("CONNECT WITH OTHER NAME");
+		lbError.setBounds(200, 11, 380, 14);
 		fmLogin.getContentPane().add(lbError);
 	}
 	
@@ -106,30 +106,38 @@ public class LoginGUI {
 		btnlogin.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
-				String IP = txtIP.getText();
+				String ip = txtIP.getText();
+				int portServer = Integer.parseInt(txtPort.getText());
 				String name = txtUsername.getText();
+
 				Pattern checkName = Pattern.compile("[a-zA-Z][^<>]*");
 				lbError.setVisible(false);
-				if (checkName.matcher(name).matches() && !IP.equals("")) {
+				
+				if (checkName.matcher(name).matches() && !ip.equals("")) {
 					try {
+						// Generate a random number for peer port
 						Random rd = new Random();
 						int portPeer = 10000 + rd.nextInt() % 1000;
-						InetAddress ipServer = InetAddress.getByName(IP);
-						int portServer = Integer.parseInt("8080");
+						// Open a socket to connect with the server
+						InetAddress ipServer = InetAddress.getByName(ip);
 						Socket socketClient = new Socket(ipServer, portServer);
-						String msg = Encode.genAccountRequest(name,Integer.toString(portPeer));
-						ObjectOutputStream serverOutputStream = new ObjectOutputStream(socketClient.getOutputStream());
-						serverOutputStream.writeObject(msg);
-						serverOutputStream.flush();
-						ObjectInputStream serverInputStream = new ObjectInputStream(socketClient.getInputStream());
-						msg = (String) serverInputStream.readObject();
+						// Encode message (user-defined protocol)
+						String message = Encode.genAccountRequest(name,Integer.toString(portPeer));
+						// Send message to the server
+						ObjectOutputStream sender = new ObjectOutputStream(socketClient.getOutputStream());
+						sender.writeObject(message); sender.flush();
+						// Get acknowledgment from the server
+						ObjectInputStream listener = new ObjectInputStream(socketClient.getInputStream());
+						message = (String) listener.readObject();
+						// Close socket
 						socketClient.close();
-						if (msg.equals(Tags.SESSION_DENY_TAG)) {
+
+						if (message.equals(Tags.SESSION_DENY_TAG)) {
 							lbError.setText(NAME_EXSIST);
 							lbError.setVisible(true);
 							return;
 						}
-						new MenuGUI(IP, portPeer, name, msg);
+						new MenuGUI(ip, portPeer, name, message);
 						fmLogin.dispose();
 					} catch (Exception e) {
 						lbError.setText(SERVER_NOT_START);
@@ -139,7 +147,6 @@ public class LoginGUI {
 				} else {
 					lbError.setText(NAME_FAILED);
 					lbError.setVisible(true);
-					lbError.setText(NAME_FAILED);
 				}
 			}
 		});
@@ -153,6 +160,7 @@ public class LoginGUI {
 				txtIP.setText("");
 				txtPort.setText("");
 				txtUsername.setText("");
+				lbError.setText("");
 			}
 		});
 		btnclear.setBounds(350, 78, 90, 29);

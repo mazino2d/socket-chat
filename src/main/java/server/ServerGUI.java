@@ -6,8 +6,6 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.Inet4Address;
-import java.net.UnknownHostException;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -30,7 +28,6 @@ public class ServerGUI {
         }
 	}
 	
-	public static int port = 8080;
 	private JFrame fmServer;
 	private JTextField txtIP, txtPort;
 	private static JTextArea txtMessage;
@@ -69,18 +66,13 @@ public class ServerGUI {
 
 	private void initializeTextBox() {
 		txtIP = new JTextField();
-		txtIP.setEditable(false);
 		txtIP.setBounds(55, 49, 210, 28);
 		fmServer.getContentPane().add(txtIP);
 		txtIP.setColumns(10);
-		try {
-			txtIP.setText(Inet4Address.getLocalHost().getHostAddress());
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+		txtIP.setText("localhost");
+		
 
 		txtPort = new JTextField();
-		txtPort.setEditable(false);
 		txtPort.setColumns(10);
 		txtPort.setBounds(336, 49, 208, 28);
 		fmServer.getContentPane().add(txtPort);
@@ -99,7 +91,9 @@ public class ServerGUI {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					server = new Server(8080);
+					String ip = txtIP.getText();
+					int port = Integer.parseInt(txtPort.getText());
+					server = new Server(ip, port);
 					ServerGUI.updateMessage("START SERVER");
 				} catch (Exception e) {
 					ServerGUI.updateMessage("START ERROR");
