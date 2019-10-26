@@ -396,6 +396,8 @@ public class ChatGUI {
 								fmChat, guest_name + " send file " + nameFileReceive
 								+ " for you", null,  JOptionPane.YES_NO_OPTION
 							);
+
+							System.out.println("result" + result);
 							
 							if (result == 0) {
 								File fileReceive = new File(URL_DIR + TEMP
@@ -410,10 +412,11 @@ public class ChatGUI {
 							} else {
 								sendMessage(Tags.FILE_REQ_NOACK_TAG);
 							}
-						} else if (Decode.checkFeedBack(msgObj)) {
-							btnChoose.setEnabled(false);
-							btnUpLoad.setEnabled(false);
-							btnDel.setEnabled(false);
+						}
+						if (Decode.checkFeedBack(msgObj)) {
+							// btnChoose.setEnabled(false);
+							// btnUpLoad.setEnabled(false);
+							// btnDel.setEnabled(false);
 							new Thread(new Runnable() {
 								public void run() {
 									try {
@@ -449,7 +452,7 @@ public class ChatGUI {
 							}).start();
 							finishReceive = true;
 						} else {
-							String message = Decode.getMessage(msgObj);
+							String message = Decode.getTextMessage(msgObj);
 							updateChat("[" + guest_name + "] : " + message);
 						}
 					} else if (obj instanceof FileData) {

@@ -31,7 +31,7 @@ public class Menu {
 		ipServer = InetAddress.getByName(arg);
 		nameUser = name;
 		portclient = arg1;
-		client = Decode.getAllUser(dataUser);
+		client = Decode.getAllAccount(dataUser);
 		new Thread(new Runnable(){
 
 			@Override
@@ -58,7 +58,7 @@ public class Menu {
 		serverInputStream = new ObjectInputStream(socketClient.getInputStream());
 		msg = (String) serverInputStream.readObject();
 		serverInputStream.close();
-		client = Decode.getAllUser(msg);
+		client = Decode.getAllAccount(msg);
 		new Thread(new Runnable() {
 
 			@Override

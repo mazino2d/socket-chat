@@ -1,10 +1,10 @@
-package protocol;
+package kraken;
 
 public class Tags {
 
 	public static int IN_VALID = -1;
 
-	public static int MAX_MSG_SIZE = 1024*1024*4;
+	public static int MAX_MSG_SIZE = 1024;
 
 	public static String SESSION_OPEN_TAG = "<SESSION>";
 	public static String SESSION_CLOSE_TAG = "</SESSION>";

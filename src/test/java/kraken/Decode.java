@@ -1,4 +1,4 @@
-package protocol;
+package kraken;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;

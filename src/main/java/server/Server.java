@@ -38,12 +38,12 @@ public class Server {
 		listener = new ObjectInputStream(connection.getInputStream());	
 
 		String message = (String) listener.readObject();						
-		ArrayList<String> getData = Decode.getUser(message);					
+		ArrayList<String> getData = Decode.getAccountInformation(message);					
 		ServerGUI.updateMessage(message);											
 		if (getData != null) {
 			if (!isExsistName(getData.get(0))) {						
 				saveNewPeer(getData.get(0), connection.getInetAddress()			
-						.toString(), Integer.parseInt(getData.get(1)));			
+						.getHostAddress(), Integer.parseInt(getData.get(1)));			
 				ServerGUI.updateMessage(getData.get(0));						
 			} else
 				return false;
