@@ -106,23 +106,22 @@ public class LoginGUI {
 		btnlogin.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
-				String ip = txtIP.getText();
-				int portServer = Integer.parseInt(txtPort.getText());
-				String name = txtUsername.getText();
-
+				String server_ip = txtIP.getText();
+				int server_port = Integer.parseInt(txtPort.getText());
+				String username = txtUsername.getText();
 				Pattern checkName = Pattern.compile("[a-zA-Z][^<>]*");
 				lbError.setVisible(false);
 				
-				if (checkName.matcher(name).matches() && !ip.equals("")) {
+				if (checkName.matcher(username).matches() && !server_ip.equals("")) {
 					try {
 						// Generate a random number for peer port
 						Random rd = new Random();
-						int portPeer = 10000 + rd.nextInt() % 1000;
+						int peer_port = 10000 + rd.nextInt() % 1000;
 						// Open a socket to connect with the server
-						InetAddress ipServer = InetAddress.getByName(ip);
-						Socket socketClient = new Socket(ipServer, portServer);
+						InetAddress server_ip_addr = InetAddress.getByName(server_ip);
+						Socket socketClient = new Socket(server_ip_addr, server_port);
 						// Encode message (user-defined protocol)
-						String message = Encode.genAccountRequest(name,Integer.toString(portPeer));
+						String message = Encode.genAccountRequest(username,Integer.toString(peer_port));
 						// Send message to the server
 						ObjectOutputStream sender = new ObjectOutputStream(socketClient.getOutputStream());
 						sender.writeObject(message); sender.flush();
@@ -137,7 +136,7 @@ public class LoginGUI {
 							lbError.setVisible(true);
 							return;
 						}
-						new MenuGUI(ip, portPeer, name, message);
+						new MenuGUI(server_ip, server_port, peer_port, username, message);
 						fmLogin.dispose();
 					} catch (Exception e) {
 						lbError.setText(SERVER_NOT_START);

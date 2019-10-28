@@ -8,22 +8,17 @@ import java.net.Socket;
 
 import protocol.Decode;
 import protocol.Tags;
-import client.Menu;
 
 public class Chat {
 
-	private String userName = "";
+	private String username = "";
+	private int port = 0;
 	private ServerSocket serverPeer;
-	private int port;
 	private boolean isStop = false;
 
-	public void stopServerPeer() {
-		isStop = true;
-	}
-
-	public Chat(String name) throws Exception {
-		userName = name;
-		port = Menu.getPort();
+	public Chat(String username, int port) throws Exception {
+		this.username = username;
+		this.port = port;
 		serverPeer = new ServerSocket(port);
 		(new WaitPeerConnect()).start();
 	}
@@ -47,11 +42,11 @@ public class Chat {
 					getRequest = new ObjectInputStream(connection.getInputStream());
 					String msg = (String) getRequest.readObject();
 					String name = Decode.getNameRequestChat(msg);
-					int result = MenuGUI.request("Would you like chat with " + name, true);
+					int result = MenuGUI.showDialog("Would you like chat with " + name, true);
 					ObjectOutputStream send = new ObjectOutputStream(connection.getOutputStream());
 					if (result == 0) {
 						send.writeObject(Tags.CHAT_ACCEPT_TAG);
-						new ChatGUI(userName, name, connection, port);
+						new ChatGUI(username, name, connection, port);
 					} else if (result == 1) {
 						send.writeObject(Tags.CHAT_DENY_TAG);
 					}

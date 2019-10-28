@@ -56,7 +56,7 @@ public class ChatGUI {
 
 	private JFrame fmChat;
 	private JPanel panelMessage, panelFile;
-	private JLabel textState, lblReceive;
+	private JLabel lbSending, lbReceiving;
 	private JTextField textPath, textSend;
 	private JTextArea txtDisplayChat;
 	private JButton btnChoose, btnUpload, btnDelete;
@@ -91,6 +91,7 @@ public class ChatGUI {
 		initializeLabel();
 		initializeTextBox();
 		initializeButton();
+		initializeProgressBar();
 	}
 
 	public ChatGUI(String user, String guest, Socket socket, int port, int a) throws Exception {
@@ -114,43 +115,43 @@ public class ChatGUI {
 		fmChat = new JFrame();
 		fmChat.setTitle("Chat Room");
 		fmChat.setResizable(false);
-		fmChat.setBounds(450, 100, 688, 600);
+		fmChat.setBounds(450, 100, 688, 570);
 		fmChat.getContentPane().setLayout(null);
 		fmChat.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 	}
 	
 	private void initializePanel() {
 		panelFile = new JPanel();
-		panelFile.setBounds(6, 363, 670, 60);
+		panelFile.setBounds(6, 363, 670, 85);
 		panelFile.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "File"));
 		fmChat.getContentPane().add(panelFile);
 		panelFile.setLayout(null);
 
 		panelMessage = new JPanel();
-		panelMessage.setBounds(6, 420, 670, 71);
+		panelMessage.setBounds(6, 460, 670, 71);
 		panelMessage.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Message"));
 		fmChat.getContentPane().add(panelMessage);
 		panelMessage.setLayout(null);
 	}
 
 	private void initializeLabel() {
-		JLabel lblClientIP = new JLabel("Chatting with: ");
-		lblClientIP.setBounds(6, 12, 155, 20);
-		fmChat.getContentPane().add(lblClientIP);
+		JLabel lbClientName = new JLabel("Chatting with: ");
+		lbClientName.setBounds(6, 12, 155, 20);
+		fmChat.getContentPane().add(lbClientName);
 
-		JLabel label = new JLabel("Address: ");
-		label.setBounds(10, 21, 100, 22);
-		panelFile.add(label);
+		JLabel lbAddress = new JLabel("Address: ");
+		lbAddress.setBounds(10, 21, 70, 22);
+		panelFile.add(lbAddress);
 
-		textState = new JLabel("");
-		textState.setBounds(6, 502, 81, 22);
-		textState.setVisible(false);
-		fmChat.getContentPane().add(textState);
+		lbSending = new JLabel("Sending");
+		lbSending.setBounds(10, 53, 81, 22);
+		lbSending.setVisible(false);
+		panelFile.add(lbSending);
 
-		lblReceive = new JLabel("Receiving ...");
-		lblReceive.setBounds(491, 510, 83, 14);
-		lblReceive.setVisible(false);
-		fmChat.getContentPane().add(lblReceive);
+		lbReceiving = new JLabel("Receiving ...");
+		lbReceiving.setBounds(550, 53, 81, 22);
+		lbReceiving.setVisible(false);
+		panelFile.add(lbReceiving);
 	}
 	
 	private void initializeTextBox() {
@@ -167,7 +168,7 @@ public class ChatGUI {
 		fmChat.getContentPane().add(txtDisplayChat);
 
 		textPath = new JTextField("");
-		textPath.setBounds(70, 21, 340, 25);
+		textPath.setBounds(90, 21, 300, 25);
 		panelFile.add(textPath);
 		textPath.setEditable(false);
 		textPath.setColumns(10);
@@ -295,11 +296,12 @@ public class ChatGUI {
 		JButton btnDisconnect = new JButton("DISCONNECT");
 		btnDisconnect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				// Show confirm diaglog
 				int result = JOptionPane.showConfirmDialog(
 					fmChat, "Do you want close chat with " + guest_name, null, 
 					JOptionPane.YES_NO_OPTION
 				);
-
+				// Yes Option
 				if (result == 0) {
 					try {
 						isStop = true;
@@ -319,9 +321,9 @@ public class ChatGUI {
 
 	private void initializeProgressBar() {
 		progressSendFile = new JProgressBar(0, 100);
-		progressSendFile.setBounds(93, 510, 388, 14);
+		progressSendFile.setBounds(93, 60, 388, 14);
 		progressSendFile.setStringPainted(true);
-		fmChat.getContentPane().add(progressSendFile);
+		panelFile.add(progressSendFile);
 		progressSendFile.setVisible(false);
 	}
 
@@ -342,17 +344,22 @@ public class ChatGUI {
 		txtDisplayChat.append(msg + "\n");
 	}
 
-	public void copyFileReceive(InputStream inputStr, OutputStream outputStr,
-			String path) throws IOException {
+	public void copyFileReceive(
+		InputStream inputStr, 
+		OutputStream outputStr, 
+		String path)
+		throws IOException {
+
 			byte[] buffer = new byte[1024];
 			int lenght;
-			while ((lenght = inputStr.read(buffer)) > 0) {
+			while ((lenght = inputStr.read(buffer)) > 0)
 				outputStr.write(buffer, 0, lenght);
-			}
+	
 			inputStr.close();
 			outputStr.close();
 			File fileTemp = new File(path);
 			if (fileTemp.exists()) fileTemp.delete();
+
 	}
 
 	public class ChatRoom extends Thread {
@@ -379,6 +386,7 @@ public class ChatGUI {
 			OutputStream out = null;
 			while (!isStop) {
 				try {
+					// Get data from another peer
 					inPeer = new ObjectInputStream(connect.getInputStream());
 					Object obj = inPeer.readObject();
 
@@ -421,9 +429,6 @@ public class ChatGUI {
 						}
 
 						if (Decode.checkFeedBack(msgObj)) {
-							// btnChoose.setEnabled(false);
-							// btnUpload.setEnabled(false);
-							// btnDelete.setEnabled(false);
 							new Thread(new Runnable() {
 								public void run() {
 									try {
@@ -441,15 +446,15 @@ public class ChatGUI {
 								fmChat, guest_name + " wantn't receive file");
 						} else if (msgObj.equals(Tags.FILE_DATA_BEGIN_TAG)) {
 							finishReceive = false;
-							lblReceive.setVisible(true);
+							lbReceiving.setVisible(true);
 							out = new FileOutputStream(URL_DIR + TEMP
 									+ nameFileReceive);
 						} else if (msgObj.equals(Tags.FILE_DATA_CLOSE_TAG)) {
-							updateChat("You receive file:	" + nameFileReceive + "with size" + sizeReceive + "KB");
+							updateChat("You receive file:	" + nameFileReceive + " with size" + sizeReceive + " KB");
 							sizeReceive = 0;
 							out.flush();
 							out.close();
-							lblReceive.setVisible(false);
+							lbReceiving.setVisible(false);
 							new Thread(new Runnable() {
 
 								@Override
@@ -484,7 +489,7 @@ public class ChatGUI {
 				sizeFile = (int) fileData.length();
 				sizeOfData = sizeFile % 1024 == 0 ? (int) (fileData.length() / 1024)
 						: (int) (fileData.length() / 1024) + 1;
-				textState.setVisible(true);
+				lbSending.setVisible(true);
 				progressSendFile.setVisible(true);
 				progressSendFile.setValue(0);
 				inFileSend = new FileInputStream(fileData);
@@ -493,7 +498,7 @@ public class ChatGUI {
 
 		public void sendFile(String path) throws Exception {
 			getData(path);
-			textState.setText("Sending ...");
+			lbSending.setText("Sending ...");
 			do {
 				if (continueSendFile) {
 					continueSendFile = false;
@@ -516,7 +521,7 @@ public class ChatGUI {
 									isSendFile = true;
 									sendMessage(Tags.FILE_DATA_CLOSE_TAG);
 									progressSendFile.setVisible(false);
-									textState.setVisible(false);
+									lbSending.setVisible(false);
 									isSendFile = false;
 									textPath.setText("");
 									btnChoose.setEnabled(true);

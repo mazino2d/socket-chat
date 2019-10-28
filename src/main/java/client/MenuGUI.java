@@ -32,25 +32,36 @@ public class MenuGUI {
         }
 	}
 
-	private Menu clientNode;
-	private static String client_ip = "", username = "", message = "";
-	private static int client_port = 0;
+	private Menu client_node;
+	private String server_ip = "";
+	private int server_port = 8080;
+	
+	private int peer_port = 0;
+	private String username = "";
+	private String message = "";
 	
 	private JFrame fmMenu;
-	private JTextField txtUserame, txtFriendName;
+	private JTextField txtUsername, txtFriendName;
 	private static JTextArea txtPeerList;
 	private JButton btnChat, btnExit;
 
-	public MenuGUI(String ip, int port, String name, String msg) throws Exception {
-		client_ip = ip;
-		client_port = port;
-		username = name;
-		message = msg;
+	public MenuGUI(String server_ip, int server_port, int peer_port, String username, String message) throws Exception {
+		this.server_ip = server_ip;
+		this.server_port = server_port;
+		this.peer_port = peer_port;
+		this.username = username;
+		this.message = message;
+
+		initializeFrame();
+		initializeLabel();
+		initializeTextBox();
+		initializeButton();
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MenuGUI window = new MenuGUI();
-					window.fmMenu.setVisible(true);
+					fmMenu.setVisible(true);
+					client_node = new Menu(server_ip, server_port, peer_port, username, message);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -63,7 +74,7 @@ public class MenuGUI {
 		initializeLabel();
 		initializeTextBox();
 		initializeButton();
-		clientNode = new Menu(client_ip, client_port, username, message);
+		client_node = new Menu(server_ip, server_port, peer_port, username, message);
 	}
 
 	private void initializeFrame() {
@@ -85,11 +96,14 @@ public class MenuGUI {
 	}
 
 	private void initializeTextBox() {
-		txtUserame = new JTextField(username);
-		txtUserame.setEditable(false);
-		txtUserame.setColumns(10);
-		txtUserame.setBounds(110, 11, 210, 28);
-		fmMenu.getContentPane().add(txtUserame);
+		System.out.println("hello");
+		System.out.println(this.username);
+		System.out.println("hello");
+		txtUsername = new JTextField(this.username);
+		txtUsername.setEditable(false);
+		txtUsername.setColumns(10);
+		txtUsername.setBounds(110, 11, 210, 28);
+		fmMenu.getContentPane().add(txtUsername);
 
 		txtPeerList = new JTextArea();
 		txtPeerList.setText("");
@@ -109,7 +123,7 @@ public class MenuGUI {
 
 			public void actionPerformed(ActionEvent arg0) {
 				String name = txtFriendName.getText();
-				if (name.equals("") || Menu.client == null) {
+				if (name.equals("") || Menu.friend_list == null) {
 					JOptionPane.showMessageDialog(fmMenu, "Name 's friend mistake!");
 					return;
 				}
@@ -117,11 +131,11 @@ public class MenuGUI {
 					JOptionPane.showMessageDialog(fmMenu, "You can't chat with yourself !");
 					return;
 				}
-				int size = Menu.client.size();
+				int size = Menu.friend_list.size();
 				for (int i = 0; i < size; i++) {
-					if (name.equals(Menu.client.get(i).getName())) {
+					if (name.equals(Menu.friend_list.get(i).getName())) {
 						try {
-							clientNode.requestChat(Menu.client.get(i).getHost(),Menu.client.get(i).getPort(), name);
+							client_node.requestChat(Menu.friend_list.get(i).getHost(),Menu.friend_list.get(i).getPort(), name);
 							return;
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -143,7 +157,7 @@ public class MenuGUI {
 				);
 				if (result == 0) {
 					try {
-						clientNode.exit();
+						client_node.requestExit();
 						fmMenu.dispose();
 					} catch (Exception e) {
 						fmMenu.dispose();
@@ -168,7 +182,7 @@ public class MenuGUI {
 		});
 	}
 
-	public static int request(String msg, boolean type) {
+	public static int showDialog(String msg, boolean type) {
 		JFrame frameMessage = new JFrame();
 		if(type)
 			return JOptionPane.showConfirmDialog(
@@ -181,11 +195,11 @@ public class MenuGUI {
 
 	}
 
-	public static void updateFiend(String msg) {
+	public static void updateFiendList(String msg) {
 		txtPeerList.append(msg + "\n");
 	}
 
-	public static void clearAll() {
+	public static void clearFriendList() {
 		txtPeerList.setText("");
 		txtPeerList.setText("");
 	}
