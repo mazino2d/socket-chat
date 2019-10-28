@@ -22,23 +22,33 @@ java -jar target/socket-chat-client-release-1.0.0-jar-with-dependencies.jar
 
 1. Server controller window
 
-![server](./demo/server_window.png)
+<p align="center">
+  <img src="./demo/server_window.png">
+</p>
 
 2. Client login window
 
-![login](./demo/login_window.png)
+<p align="center">
+  <img src="./demo/login_window.png">
+</p>
 
 3. Client menu window
 
-![menu](./demo/menu_window.png)
+<p align="center">
+  <img src="./demo/client_window.png">
+</p>
 
 4. Client chat window
 
-![chat](./demo/chat_window.png)
+<p align="center">
+  <img src="./demo/chat_window.png">
+</p>
 
 5. Browse file window
 
-![chat](./demo/file_window.png)
+<p align="center">
+  <img src="./demo/file_window.png">
+</p>
 
 # Thanks
 
