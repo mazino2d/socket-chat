@@ -3,6 +3,7 @@ package client;
 import java.awt.EventQueue;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -114,6 +115,8 @@ public class ChatGUI {
 	private void initializeFrame() {
 		fmChat = new JFrame();
 		fmChat.setTitle("Chat Room");
+		ImageIcon image = new ImageIcon(URL_DIR + "/src/main/resources/chat_icon.png");
+		fmChat.setIconImage(image.getImage());
 		fmChat.setResizable(false);
 		fmChat.setBounds(450, 100, 688, 570);
 		fmChat.getContentPane().setLayout(null);

@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 
@@ -28,6 +29,8 @@ public class ServerGUI {
         }
 	}
 	
+	private static String URL_DIR = System.getProperty("user.dir");
+
 	private JFrame fmServer;
 	private JTextField txtIP, txtPort;
 	private static JTextArea txtMessage;
@@ -44,6 +47,8 @@ public class ServerGUI {
 	private void initializeFrame() {
 		fmServer = new JFrame();
 		fmServer.setTitle("Server Controller");
+		ImageIcon image = new ImageIcon(URL_DIR + "/src/main/resources/server_icon.png");
+		fmServer.setIconImage(image.getImage());
 		fmServer.setResizable(false);
 		fmServer.setBounds(200, 200, 550, 442);
 		fmServer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

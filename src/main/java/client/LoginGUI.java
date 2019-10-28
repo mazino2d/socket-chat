@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import client.MenuGUI;
 import mdlaf.MaterialLookAndFeel;
@@ -35,6 +36,8 @@ public class LoginGUI {
         }
 	}
 
+	private static String URL_DIR = System.getProperty("user.dir");
+
 	private static String NAME_FAILED = "CONNECT WITH OTHER NAME";
 	private static String NAME_EXSIST = "NAME IS EXSISED";
 	private static String SERVER_NOT_START = "SERVER NOT START";
@@ -53,6 +56,8 @@ public class LoginGUI {
 	private void initializeFrame() {
 		fmLogin = new JFrame();
 		fmLogin.setTitle("Login");
+		ImageIcon image = new ImageIcon(URL_DIR + "/src/main/resources/login_icon.png");
+		fmLogin.setIconImage(image.getImage());
 		fmLogin.setResizable(false);
 		fmLogin.setBounds(500, 200, 448, 200);
 		fmLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

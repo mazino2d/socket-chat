@@ -17,3 +17,9 @@ java -jar target/socket-chat-client-release-1.0.0-jar-with-dependencies.jar
 ```
 
 *Note* : You can build a container to compile. We prepared a docker file in this repository.
+
+
+# Thanks
+
+1. Thank you [icon8](https://icons8.com) for the icon of the application
+2. Thank you  [vincenzopalazzo](https://github.com/vincenzopalazzo/material-ui-swing) for the modern, Material Design UI for Java Swing.

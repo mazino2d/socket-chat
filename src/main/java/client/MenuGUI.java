@@ -12,7 +12,7 @@ import mdlaf.MaterialLookAndFeel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
-
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import protocol.Tags;
@@ -31,6 +31,8 @@ public class MenuGUI {
             e.printStackTrace();
         }
 	}
+
+	private static String URL_DIR = System.getProperty("user.dir");
 
 	private Menu client_node;
 	private String server_ip = "";
@@ -79,6 +81,9 @@ public class MenuGUI {
 
 	private void initializeFrame() {
 		fmMenu = new JFrame();
+		fmMenu.setTitle("Menu");
+		ImageIcon image = new ImageIcon(URL_DIR + "/src/main/resources/menu_icon.png");
+		fmMenu.setIconImage(image.getImage());
 		fmMenu.setResizable(false);
 		fmMenu.setBounds(100, 100, 330, 540);
 		fmMenu.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -96,9 +101,6 @@ public class MenuGUI {
 	}
 
 	private void initializeTextBox() {
-		System.out.println("hello");
-		System.out.println(this.username);
-		System.out.println("hello");
 		txtUsername = new JTextField(this.username);
 		txtUsername.setEditable(false);
 		txtUsername.setColumns(10);
