@@ -21,16 +21,24 @@ java -jar target/socket-chat-client-release-1.0.0-jar-with-dependencies.jar
 # Demonstration
 
 1. Server controller window
+
 ![server](./demo/server_window.png)
 
 2. Client login window
+
 ![login](./demo/login_window.png)
 
 3. Client menu window
+
 ![menu](./demo/menu_window.png)
 
 4. Client chat window
+
 ![chat](./demo/chat_window.png)
+
+5. Browse file window
+
+![chat](./demo/file_window.png)
 
 # Thanks
 
