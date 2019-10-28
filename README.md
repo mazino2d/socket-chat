@@ -35,7 +35,7 @@ java -jar target/socket-chat-client-release-1.0.0-jar-with-dependencies.jar
 3. Send file demo
 
 <p align="center">
-  <img src="./demo/fsend_file_demo.gif">
+  <img src="./demo/send_file_demo.gif">
 </p>
 
 4. Server controller window
