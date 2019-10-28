@@ -35,7 +35,7 @@ java -jar target/socket-chat-client-release-1.0.0-jar-with-dependencies.jar
 3. Client menu window
 
 <p align="center">
-  <img src="./demo/client_window.png">
+  <img src="./demo/menu_window.png">
 </p>
 
 4. Client chat window
