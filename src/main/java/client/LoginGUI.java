@@ -59,7 +59,7 @@ public class LoginGUI {
 		ImageIcon image = new ImageIcon(URL_DIR + "/src/main/resources/login_icon.png");
 		fmLogin.setIconImage(image.getImage());
 		fmLogin.setResizable(false);
-		fmLogin.setBounds(500, 200, 448, 200);
+		fmLogin.setBounds(500, 200, 448, 150);
 		fmLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fmLogin.getContentPane().setLayout(null);
 	}
