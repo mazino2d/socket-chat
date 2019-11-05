@@ -490,8 +490,8 @@ public class ChatGUI {
 				sizeOfSend = 0;
 				dataFile = new FileData();
 				sizeFile = (int) fileData.length();
-				sizeOfData = sizeFile % 1024 == 0 ? (int) (fileData.length() / 1024)
-						: (int) (fileData.length() / 1024) + 1;
+				// sizeOfData = sizeFile % 1024 == 0 ? (int) (fileData.length() / 1024) : (int) (fileData.length() / 1024) + 1;
+				sizeOfData =  (int) (fileData.length() / 1024) + 1;
 				lbSending.setVisible(true);
 				progressSendFile.setVisible(true);
 				progressSendFile.setValue(0);
@@ -517,8 +517,10 @@ public class ChatGUI {
 									int size = sizeFile - sizeOfSend * 1024;
 									dataFile = new FileData(size);
 								}
-								progressSendFile
-										.setValue((int) (sizeOfSend * 100 / sizeOfData));
+								progressSendFile.setValue((int) (sizeOfSend * 100 / sizeOfData));
+								System.out.println(sizeOfSend);
+								System.out.println(sizeOfData);
+								System.out.println("");
 								if (sizeOfSend >= sizeOfData) {
 									inFileSend.close();
 									isSendFile = true;
@@ -527,11 +529,11 @@ public class ChatGUI {
 									lbSending.setVisible(false);
 									isSendFile = false;
 									textPath.setText("");
-									btnChoose.setEnabled(true);
-									btnUpload.setEnabled(true);
-									btnDelete.setEnabled(true);
+									// btnChoose.setEnabled(true);
+									// btnUpload.setEnabled(true);
+									// btnDelete.setEnabled(true);
 									updateChat("!!!YOU ARE SEND FILE COMPLETE!!!");
-									inFileSend.close();
+									// inFileSend.close();
 								}
 								continueSendFile = true;
 							} catch (Exception e) {
