@@ -55,7 +55,7 @@ public class Decode {
 				return name;
 			}
 		}
-		return null;
+		return "";
 	}
 
 	public static ArrayList<Peer> getAllAccount(String message) {
@@ -100,7 +100,7 @@ public class Decode {
 			String text_message = message.substring(begin, end);
 			return text_message;
 		} else
-			return null;
+			return "";
 	}
 
 	public static String getNameRequestChat(String msg) {
@@ -115,7 +115,7 @@ public class Decode {
 											.length());
 			return name;
 		}
-		return null;
+		return "";
 	}
 
 	public static boolean checkFile(String name) {
