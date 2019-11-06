@@ -60,7 +60,6 @@ public class ChatGUI {
 	private JLabel lbSending, lbReceiving;
 	private JTextField textPath, textSend;
 	private JTextArea txtDisplayChat;
-	private JButton btnChoose, btnUpload, btnDelete;
 	private JProgressBar progressSendFile;
 
 	private ChatRoom chat;
@@ -453,7 +452,7 @@ public class ChatGUI {
 							out = new FileOutputStream(URL_DIR + TEMP
 									+ nameFileReceive);
 						} else if (msgObj.equals(Tags.FILE_DATA_CLOSE_TAG)) {
-							updateChat("You receive file:	" + nameFileReceive + " with size" + sizeReceive + " KB");
+							updateChat("You receive file:	" + nameFileReceive + " with size " + sizeReceive + " KB");
 							sizeReceive = 0;
 							out.flush();
 							out.close();
@@ -529,11 +528,7 @@ public class ChatGUI {
 									lbSending.setVisible(false);
 									isSendFile = false;
 									textPath.setText("");
-									// btnChoose.setEnabled(true);
-									// btnUpload.setEnabled(true);
-									// btnDelete.setEnabled(true);
-									updateChat("!!!YOU ARE SEND FILE COMPLETE!!!");
-									// inFileSend.close();
+									updateChat("YOU ARE SEND FILE COMPLETE !!!");
 								}
 								continueSendFile = true;
 							} catch (Exception e) {
@@ -541,6 +536,7 @@ public class ChatGUI {
 							}
 						}
 					}).start();
+					Thread.sleep(10);
 				}
 			} while (sizeOfSend < sizeOfData);
 		}
